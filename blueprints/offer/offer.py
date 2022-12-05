@@ -1,9 +1,12 @@
 import json
 from flask import request
 from flask import Blueprint
-from flask_sqlalchemy import SQLAlchemy
+from setup_db import db
 from utils.models import Offer
 
+
+# В переменную offer закладываем blueprint, который будем использовать
+# в основном файле программы.
 
 offer = Blueprint(
     'offer',
@@ -11,12 +14,6 @@ offer = Blueprint(
     template_folder='templates/offer',
     static_folder='static'
 )
-'''
-В переменную offer закладываем blueprint, который будем использовать
-в основном файле программы. 
-'''
-
-db = SQLAlchemy(offer)
 
 @offer.route('/offers', methods=['GET', 'POST'])
 def offers():
@@ -48,7 +45,7 @@ def offers():
         return f'<h1>Offer created!</h1>', 201
 
 
-@offer.route('/offers/<int: uid>', methods=['GET', 'PUT', 'DELETE'])
+@offer.route('/offers/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def offer_id(uid: int):
 
     if request.method == 'GET':
@@ -56,7 +53,7 @@ def offer_id(uid: int):
         Проверка запроса и последующий вывод одного пользователя по id.
         '''
         return f'<h1>Offer with {uid} found!</h1>' \
-               f'{json.dumps(Offer.query.get(uid).to_dict_offer)}', 200
+               f'{json.dumps(Offer.query.get(uid).to_dict_offer())}', 200
 
     if request.method == 'PUT':
         '''

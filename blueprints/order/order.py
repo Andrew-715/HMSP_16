@@ -1,22 +1,18 @@
 import json
 from flask import request
 from flask import Blueprint
-from flask_sqlalchemy import SQLAlchemy
+from setup_db import db
 from utils.models import Order
 
 
+# В переменную order закладываем blueprint, который будем использовать
+# в основном файле программы.
 order = Blueprint(
     'order',
     __name__,
     template_folder='templates/order',
     static_folder='static'
 )
-'''
-В переменную order закладываем blueprint, который будем использовать
-в основном файле программы. 
-'''
-
-db = SQLAlchemy(order)
 
 @order.route('/orders', methods=['GET', 'POST'])
 def orders():
@@ -54,7 +50,7 @@ def orders():
         return f'<h1>Order created!</h1>', 201
 
 
-@order.route('/orders/<int: uid>', methods=['GET', 'PUT', 'DELETE'])
+@order.route('/orders/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def order_id(uid: int):
 
     if request.method == 'GET':
@@ -62,7 +58,7 @@ def order_id(uid: int):
         Проверка запроса и последующий вывод одного пользователя по id.
         '''
         return f'<h1>Order with {uid} found!</h1>' \
-               f'{json.dumps(Order.query.get(uid).to_dict_order)}', 200
+               f'{json.dumps(Order.query.get(uid).to_dict_order())}', 200
 
     if request.method == 'PUT':
         '''

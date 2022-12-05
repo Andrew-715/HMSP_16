@@ -1,14 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-from utils.funtions import starting_flask,\
-                     database_user, \
-                     database_offer, \
-                     database_order
-
-app = starting_flask
-db = SQLAlchemy(app)
-
-
-# db = starting_flask()
+from setup_db import db
 
 
 class User(db.Model):
@@ -87,8 +77,8 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key='True')
     name = db.Column(db.Text(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
+    start_date = db.Column(db.Text)
+    end_date = db.Column(db.Text)
     address = db.Column(db.Text)
     price = db.Column(db.Numeric, nullable=False)
     customer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -118,20 +108,3 @@ class Order(db.Model):
                f'{self.name}, ' \
                f'{self.customer_id}, ' \
                f'{self.executor_id}'
-
-
-database_user(db, User)
-'''
-Импортируемая функция database_user добавляет уже заданные данные
-из json_data.py в базу данных default.db
-'''
-database_offer(db, Offer)
-'''
-Импортируемая функция database_offer добавляет уже заданные данные
-из json_data.py в базу данных default.db
-'''
-database_order(db, Order)
-'''
-Импортируемая функция database_order добавляет уже заданные данные
-из json_data.py в базу данных default.db
-'''

@@ -1,22 +1,18 @@
 import json
 from flask import request
 from flask import Blueprint
-from flask_sqlalchemy import SQLAlchemy
+from setup_db import db
 from utils.models import User
 
 
+# В переменную user закладываем blueprint, который будем использовать
+# в основном файле программы.
 user = Blueprint(
     'user',
     __name__,
     template_folder='templates/user',
     static_folder='static'
 )
-'''
-В переменную user закладываем blueprint, который будем использовать
-в основном файле программы. 
-'''
-
-db = SQLAlchemy(user)
 
 @user.route('/users', methods=['GET', 'POST'])
 def users():
@@ -52,7 +48,7 @@ def users():
         return f'<h1>User created!</h1>', 201
 
 
-@user.route('/users/<int: uid>', methods=['GET', 'PUT', 'DELETE'])
+@user.route('/users/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def user_id(uid: int):
 
     if request.method == 'GET':
@@ -60,7 +56,7 @@ def user_id(uid: int):
         Проверка запроса и последующий вывод одного пользователя по id.
         '''
         return f'<h1>User with {uid} found!</h1>' \
-               f'{json.dumps(User.query.get(uid).to_dict_user)}', 200
+               f'{json.dumps(User.query.get(uid).to_dict_user())}', 200
 
     if request.method == 'PUT':
         '''

@@ -1,6 +1,6 @@
 from flask import Flask
 from database import json_data
-
+from setup_db import db
 
 
 def starting_flask():
@@ -11,8 +11,12 @@ def starting_flask():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/default.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    if __name__ == '__main__':
-        app.run(debug=True)
+    db.init_app(app)
+    '''
+    С помощью init_app связывает между собой SQLAlchemy и app
+    '''
+
+    return app
 
 
 def database_user(db, User):
@@ -20,8 +24,6 @@ def database_user(db, User):
     Функция database_user позволяет добавить данные из json_data
     в таблицу user.
     '''
-    db.drop_all()
-    db.create_all()
 
     for user_data in json_data.users:
         new_user = User(
@@ -43,8 +45,6 @@ def database_order(db, Order):
     Функция database_order позволяет добавить данные из json_data
     в таблицу order.
     '''
-    db.drop_all()
-    db.create_all()
 
     for user_data in json_data.orders:
         new_user = Order(
@@ -68,8 +68,6 @@ def database_offer(db, Offer):
     Функция database_user позволяет добавить данные из json_data
     в таблицу user.
     '''
-    db.drop_all()
-    db.create_all()
 
     for user_data in json_data.offers:
         new_user = Offer(
